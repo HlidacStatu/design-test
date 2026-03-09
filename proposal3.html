@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hlídač státu — Proposal 3: Warm Modern</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf9f7;
+  --bg-warm: #f5f0eb;
+  --navy: #111827;
+  --navy-90: rgba(17,24,39,0.9);
+  --red: #dc2626;
+  --red-soft: #fee2e2;
+  --red-dark: #b91c1c;
+  --cream: #fefbf6;
+  --white: #ffffff;
+  --gray-100: #f1f5f9;
+  --gray-200: #e5e7eb;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-700: #374151;
+  --green-bg: #ecfdf5;
+  --green: #059669;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Manrope', -apple-system, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--navy);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* DESIGN LABEL */
+.design-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--red);
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  z-index: 999;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: var(--white);
+  position: sticky;
+  top: 30px;
+  z-index: 100;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--font-body);
+  font-size: 1.45rem;
+  font-weight: 500;
+  color: var(--navy);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.logo strong { font-weight: 800; }
+.logo-heart {
+  color: var(--red);
+  font-size: 0.6em;
+  vertical-align: super;
+}
+
+nav { display: flex; gap: 1.75rem; align-items: center; }
+nav a {
+  color: var(--gray-500);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--navy); }
+
+.nav-support {
+  background: var(--navy);
+  color: var(--white) !important;
+  padding: 0.55rem 1.25rem;
+  border-radius: 100px;
+  font-weight: 700 !important;
+  transition: all 0.2s !important;
+}
+.nav-support:hover {
+  background: var(--red) !important;
+}
+
+/* ===== HERO ===== */
+.hero {
+  background: var(--white);
+  padding: 4.5rem 2rem 3.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.hero-inner {
+  max-width: 740px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--red-soft);
+  color: var(--red);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.45rem 1rem;
+  border-radius: 100px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-badge span {
+  width: 6px;
+  height: 6px;
+  background: var(--red);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: 3.25rem;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.25rem;
+}
+
+.hero p {
+  color: var(--gray-500);
+  font-size: 1.15rem;
+  line-height: 1.65;
+  max-width: 560px;
+  margin: 0 auto 2.5rem;
+}
+
+.search-wrap {
+  max-width: 580px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.search-wrap input {
+  width: 100%;
+  padding: 1.15rem 1.75rem;
+  padding-right: 130px;
+  border: 2px solid var(--gray-200);
+  border-radius: 100px;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  color: var(--navy);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: var(--white);
+}
+.search-wrap input:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 4px rgba(220,38,38,0.08);
+}
+.search-wrap input::placeholder { color: var(--gray-400); }
+
+.search-wrap button {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--red);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.search-wrap button:hover { background: var(--red-dark); }
+
+.hero-chips {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.hero-chips a {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-decoration: none;
+  padding: 0.35rem 0.85rem;
+  background: var(--bg);
+  border-radius: 100px;
+  transition: all 0.2s;
+}
+.hero-chips a:hover {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+/* ===== FEATURES (what we offer) ===== */
+.features {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4.5rem 2rem 4rem;
+}
+
+.features-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.features-header h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.feat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.feat-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid var(--gray-200);
+  transition: all 0.3s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.feat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+  border-color: transparent;
+}
+
+.feat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.feat-card:hover::before { transform: scaleX(1); }
+
+.feat-emoji {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.feat-card h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.feat-card p {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+  line-height: 1.6;
+}
+
+.feat-number {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 900;
+  color: rgba(0,0,0,0.03);
+}
+
+/* ===== NEWS ===== */
+.news {
+  background: var(--white);
+  padding: 5rem 2rem;
+}
+
+.news-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.news-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2.5rem;
+}
+
+.news-top h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.news-top .pastvina-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--navy);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  margin-left: 0.75rem;
+  vertical-align: middle;
+}
+
+.all-articles-link {
+  color: var(--red);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: gap 0.2s;
+}
+.all-articles-link:hover { gap: 0.6rem; }
+
+.news-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 2rem;
+}
+
+.news-main {
+  background: var(--bg);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.news-main:hover {
+  box-shadow: 0 16px 48px rgba(0,0,0,0.08);
+}
+
+.news-main-img {
+  height: 280px;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  position: relative;
+}
+
+.news-main-img .tag {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  background: var(--red);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+}
+
+.news-main-body {
+  padding: 2rem;
+}
+
+.news-meta {
+  font-size: 0.78rem;
+  color: var(--gray-400);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.news-main-body h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.news-main-body p {
+  font-size: 0.9rem;
+  color: var(--gray-500);
+  line-height: 1.6;
+}
+
+.news-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.news-side-card {
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: all 0.3s;
+  cursor: pointer;
+  flex: 1;
+}
+.news-side-card:hover {
+  background: var(--white);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  transform: translateX(4px);
+}
+
+.news-side-card .news-meta {
+  margin-bottom: 0.35rem;
+}
+
+.news-side-card h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.35;
+  margin-bottom: 0.4rem;
+}
+
+.news-side-card p {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  line-height: 1.55;
+}
+
+/* ===== NEWSLETTER ===== */
+.newsletter {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 2rem 5rem;
+}
+
+.nl-card {
+  background: var(--bg-warm);
+  border-radius: 24px;
+  padding: 3.5rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.nl-card::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  right: -80px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(220,38,38,0.06), transparent 70%);
+  border-radius: 50%;
+}
+
+.nl-left {
+  position: relative;
+  z-index: 1;
+}
+
+.nl-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--white);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.nl-left h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+}
+
+.nl-left p {
+  color: var(--gray-500);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.nl-right {
+  position: relative;
+  z-index: 1;
+}
+
+.nl-right input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--gray-200);
+  border-radius: 12px;
+  background: var(--white);
+  font-size: 1rem;
+  font-family: var(--font-body);
+  color: var(--navy);
+  outline: none;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.2s;
+}
+.nl-right input:focus { border-color: var(--red); }
+.nl-right input::placeholder { color: var(--gray-400); }
+
+.nl-right button {
+  width: 100%;
+  background: var(--red);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.nl-right button:hover { background: var(--red-dark); }
+
+.nl-right .privacy-note {
+  font-size: 0.72rem;
+  color: var(--gray-400);
+  margin-top: 0.6rem;
+  text-align: center;
+}
+
+/* ===== FUNDRAISING ===== */
+.fundraising {
+  background: var(--navy);
+  color: var(--white);
+  padding: 5rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.fundraising::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: -100px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(220,38,38,0.08), transparent 70%);
+}
+
+.fund-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.fund-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.fund-left h2 {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1.12;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.fund-left p {
+  color: rgba(255,255,255,0.6);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 440px;
+}
+
+.fund-cta-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--red);
+  color: white;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+.cta-primary:hover {
+  background: var(--red-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(220,38,38,0.3);
+}
+
+.cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: all 0.2s;
+}
+.cta-ghost:hover {
+  color: white;
+  border-color: rgba(255,255,255,0.3);
+}
+
+.fund-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.fund-item {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 1.75rem;
+  transition: all 0.3s;
+}
+.fund-item:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(220,38,38,0.2);
+}
+
+.fund-item-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(220,38,38,0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.fund-item h4 {
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.fund-item p {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.5;
+}
+
+.fund-item .highlight-num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--red);
+  margin-top: 0.5rem;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--navy);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 3rem 2rem 2rem;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-brand .logo {
+  color: var(--white);
+}
+
+.footer-brand p {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-top: 0.75rem;
+  max-width: 280px;
+}
+
+.footer-col h5 {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 1rem;
+}
+
+.footer-col a {
+  display: block;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-bottom: 0.45rem;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: white; }
+
+.footer-bottom {
+  padding-top: 1.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.25);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-inner { animation: fadeIn 0.7s ease-out; }
+.feat-card { animation: fadeIn 0.5s ease-out backwards; }
+.feat-card:nth-child(1) { animation-delay: 0.1s; }
+.feat-card:nth-child(2) { animation-delay: 0.2s; }
+.feat-card:nth-child(3) { animation-delay: 0.3s; }
+.feat-card:nth-child(4) { animation-delay: 0.4s; }
+.feat-card:nth-child(5) { animation-delay: 0.5s; }
+.feat-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .feat-grid { grid-template-columns: repeat(2, 1fr); }
+  .news-layout { grid-template-columns: 1fr; }
+  .nl-card { grid-template-columns: 1fr; padding: 2.5rem; }
+  .fund-grid { grid-template-columns: 1fr; }
+  .footer-main { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px) {
+  nav { display: none; }
+  .hero h1 { font-size: 2.25rem; }
+  .feat-grid { grid-template-columns: 1fr; }
+  .fund-right { grid-template-columns: 1fr; }
+  .fund-cta-group { flex-direction: column; }
+  .footer-main { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="design-label">PROPOSAL 3 — WARM MODERN</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">Hlídač <strong>státu</strong><span class="logo-heart"> ❤</span></a>
+    <nav>
+      <a href="#">Smlouvy</a>
+      <a href="#">Zakázky</a>
+      <a href="#">Dotace</a>
+      <a href="#">Platy</a>
+      <a href="#">PastVina</a>
+      <a href="#" class="nav-support">Podpořte nás</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span></span>
+      Nezisková organizace pro transparentní stát
+    </div>
+    <h1>Víte, jak stát hospodaří s&nbsp;vašimi penězi?</h1>
+    <p>Propojujeme smlouvy, zakázky, dotace i platy úředníků. Největší databáze transparentnosti v ČR — zdarma pro všechny.</p>
+    <div class="search-wrap">
+      <input type="text" placeholder="Hledejte firmu, úřad, politika, smlouvu...">
+      <button>Hledat</button>
+    </div>
+    <div class="hero-chips">
+      <a href="#">Registr smluv</a>
+      <a href="#">Veřejné zakázky</a>
+      <a href="#">Dotace</a>
+      <a href="#">Platy úředníků</a>
+      <a href="#">Sponzoři stran</a>
+      <a href="#">K-Index</a>
+      <a href="#">Státní weby</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="features-header">
+    <h2>Co u nás najdete</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <span class="feat-emoji">📑</span>
+      <h3>Smlouvy státu</h3>
+      <p>Kompletní registr smluv propojený s obchodním rejstříkem, insolvencemi a analytickými nástroji.</p>
+      <div class="feat-number">2,4M</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-emoji">🏗️</span>
+      <h3>Veřejné zakázky</h3>
+      <p>Data, analýzy a hodnocení transparentnosti veřejných zakázek úřadů a státních firem.</p>
+      <div class="feat-number">VZ</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-emoji">💰</span>
+      <h3>Dotace</h3>
+      <p>Jediné místo s přehledem všech evropských, státních i krajských dotací a analytických reportů.</p>
+      <div class="feat-number">850B</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-emoji">👔</span>
+      <h3>Platy úředníků a politiků</h3>
+      <p>Odměny 6 320 úředníků z 453 organizací. Příjmy 1 317 volených politiků a kumulace funkcí.</p>
+      <div class="feat-number">6320</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-emoji">🤝</span>
+      <h3>Sponzoři a politické strany</h3>
+      <p>Kdo financuje politické strany? Propojení sponzorů s firmami obchodujícími se státem.</p>
+      <div class="feat-number">SP</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-emoji">📊</span>
+      <h3>K-Index rizik</h3>
+      <p>Unikátní hodnocení míry rizik korupce a nehospodárnosti u stovek úřadů. Rating A až F.</p>
+      <div class="feat-number">A–F</div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="news">
+  <div class="news-inner">
+    <div class="news-top">
+      <h2>Novinky a investigace <span class="pastvina-badge">PastVina</span></h2>
+      <a href="https://www.past-vina.cz" class="all-articles-link">Všechny články →</a>
+    </div>
+    <div class="news-layout">
+      <div class="news-main">
+        <div class="news-main-img">
+          <span class="tag">Investigace</span>
+        </div>
+        <div class="news-main-body">
+          <div class="news-meta">17. února 2026 · PastVina / Redakce</div>
+          <h3>Nekritizujte česko-vatikánskou smlouvu a církev bude vstřícná obětem zneužívání</h3>
+          <p>Téměř rok čekají oběti zneužívání v církvi na reakci z Vatikánu. Apoštolský nuncius jim na schůzce naznačil výměnný obchod: vstřícnost za mlčení ke smlouvě.</p>
+        </div>
+      </div>
+      <div class="news-sidebar">
+        <div class="news-side-card">
+          <div class="news-meta">12. 2. 2026 · Série: Škola Sion</div>
+          <h4>Poslanec Doksanský na nahrávkách tlačí na studenty kvůli penězům i plesu</h4>
+          <p>Nahrávky odhalují nátlak na studenty zahrnující zpochybňování jejich postavení.</p>
+        </div>
+        <div class="news-side-card">
+          <div class="news-meta">21. 1. 2026 · Veřejné peníze</div>
+          <h4>Kontrola stamilionových dotací pro veslaře? Ne! Odmítli ji vládní poslanci</h4>
+          <p>Podezření na předražené nákupy za 117 milionů zůstává bez kontroly.</p>
+        </div>
+        <div class="news-side-card">
+          <div class="news-meta">9. 1. 2026 · Kontrollka</div>
+          <h4>Byznys Radima Fialy v datech: Stovky milionů ze státního rozpočtu</h4>
+          <p>Firmy z blízkosti místopředsedy SPD jsou na veřejné peníze napojeny rekordní silou.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="nl-card">
+    <div class="nl-left">
+      <div class="nl-icon">📮</div>
+      <h2>Páteční newsletter</h2>
+      <p>Každý pátek posíláme souhrn nejdůležitějších novinek, investigací a zajímavých dat. Žádný spam — jen to, co stojí za přečtení.</p>
+    </div>
+    <div class="nl-right">
+      <input type="email" placeholder="Váš e-mail">
+      <button>Přihlásit k odběru zdarma</button>
+      <div class="privacy-note">Vaše data nikdy nesdílíme. Odhlášení jedním klikem.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNDRAISING -->
+<section class="fundraising">
+  <div class="fund-inner">
+    <div class="fund-grid">
+      <div class="fund-left">
+        <h2>Hlídáme stát<br>díky vám</h2>
+        <p>Jsme nezisková organizace. Každý dar — malý i velký — pomáhá odhalovat, jak se nakládá s veřejnými penězi, a udržet naše nástroje dostupné všem občanům.</p>
+        <div class="fund-cta-group">
+          <a href="#" class="cta-primary">❤ Přispět na Darujme.cz</a>
+          <a href="#" class="cta-ghost">O naší práci →</a>
+        </div>
+      </div>
+      <div class="fund-right">
+        <div class="fund-item">
+          <div class="fund-item-icon">🔍</div>
+          <h4>PastVina</h4>
+          <p>Investigativní projekt s exreportéry České televize</p>
+        </div>
+        <div class="fund-item">
+          <div class="fund-item-icon">📑</div>
+          <h4>Smlouvy a zakázky</h4>
+          <p>Evidujeme, analyzujeme a kontrolujeme</p>
+          <div class="highlight-num">2,4M+</div>
+        </div>
+        <div class="fund-item">
+          <div class="fund-item-icon">👤</div>
+          <h4>Platy a příjmy</h4>
+          <p>Úředníků, politiků a manažerů státu</p>
+          <div class="highlight-num">6 320</div>
+        </div>
+        <div class="fund-item">
+          <div class="fund-item-icon">🏆</div>
+          <h4>Křišťálová lupa</h4>
+          <p>Nejlepší internetový projekt a open data aplikace v ČR</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a href="#" class="logo">Hlídač <strong>státu</strong></a>
+        <p>Nestátní nezisková organizace kontrolující hospodaření státu. Vše zdarma pro všechny.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Databáze</h5>
+        <a href="#">Registr smluv</a>
+        <a href="#">Veřejné zakázky</a>
+        <a href="#">Dotace</a>
+        <a href="#">Platy úředníků</a>
+        <a href="#">Sponzoři stran</a>
+      </div>
+      <div class="footer-col">
+        <h5>O nás</h5>
+        <a href="#">Tým</a>
+        <a href="#">Proč hlídáme</a>
+        <a href="#">Kodex</a>
+        <a href="#">Pro média</a>
+      </div>
+      <div class="footer-col">
+        <h5>Podpora</h5>
+        <a href="#">Darujme.cz</a>
+        <a href="#">API a Open data</a>
+        <a href="#">Kontakt</a>
+        <a href="#">Podmínky</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      Hlídač státu, z.ú. · 2017–2026 · Transparentní účet 2701199023/2010
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
